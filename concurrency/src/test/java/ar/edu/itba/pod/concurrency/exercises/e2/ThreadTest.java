@@ -17,7 +17,57 @@ public class ThreadTest {
     }
 
     @Test
-    public final void test() {
-        assertEquals("No one in queue", "No one in queue");
+    public final void testRawThread() {
+        Thread t1 = new Thread() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 5; i += 1) {
+                    service.addVisit();
+                }
+                System.out.println(service.getVisitCount());
+            }
+        };
+        t1.start();
+         try {
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public final void testRunnable() {
+        Runnable r1 = new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 5; i += 1) {
+                    service.addVisit();
+                }
+                System.out.println(service.getVisitCount());
+            }
+        };
+        Thread t1 = new Thread(r1);
+        t1.start();
+        try {
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public final void testLambda() {
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 5; i += 1) {
+                service.addVisit();
+            }
+            System.out.println(service.getVisitCount());
+        });
+        t1.start();
+        try {
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
