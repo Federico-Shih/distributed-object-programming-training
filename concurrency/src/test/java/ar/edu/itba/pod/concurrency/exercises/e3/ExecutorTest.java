@@ -15,7 +15,7 @@ public class ExecutorTest {
 
     @BeforeEach
     public final void before() {
-        service = new GenericServiceImpl();
+        service = GenericServiceImpl.createGenericServiceImpl();
     }
 
     @Test

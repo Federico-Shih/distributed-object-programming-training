@@ -1,5 +1,7 @@
 package ar.edu.itba.pod.concurrency.exercises.t1;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -32,9 +34,8 @@ public class LocalBranch {
             }
             service.invokeAll(works);
             service.shutdownNow();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (InterruptedException e) {
+           e.printStackTrace();
         }
-
     }
 }

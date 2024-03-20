@@ -1,13 +1,25 @@
 package ar.edu.itba.pod.concurrency.exercises.e1;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Basic implementation of {@link GenericService}.
  */
 public  class GenericServiceImpl implements GenericService {
-    int counter = 0;
-    Deque<String> list = new LinkedList<>();
+    final Object lock = "LOCK VISITS";
+    int counter;
+    final Deque<String> list;
+
+    private GenericServiceImpl() {
+        counter = 0;
+        list = new LinkedList<>();
+    }
+
+    public static GenericService createGenericServiceImpl() {
+        return new GenericServiceImpl();
+    }
+
 
     @Override
     public String echo(String message) {
@@ -21,17 +33,23 @@ public  class GenericServiceImpl implements GenericService {
 
     @Override
     public void addVisit() {
-        this.counter += 1;
+        synchronized (lock) {
+            this.counter += 1;
+        }
     }
 
     @Override
     public int getVisitCount() {
-        return counter;
+        synchronized (lock) {
+            return counter;
+        }
     }
 
     @Override
     public boolean isServiceQueueEmpty() {
-        return list.isEmpty();
+        synchronized (list) {
+            return list.isEmpty();
+        }
     }
 
     @Override
@@ -39,11 +57,15 @@ public  class GenericServiceImpl implements GenericService {
         if (name == null) {
             throw new NullPointerException();
         }
-        list.add(name);
+        synchronized (list) {
+            list.add(name);
+        }
     }
 
     @Override
     public String getFirstInServiceQueue() {
-        return Optional.ofNullable(list.poll()).orElseThrow(() ->  new IllegalStateException("No one in queue"));
+        synchronized (list) {
+            return Optional.ofNullable(list.poll()).orElseThrow(() ->  new IllegalStateException("No one in queue"));
+        }
     }
 }
