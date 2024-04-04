@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+package service;
+
+option java_package = "ar.edu.itba.pod.grpc";
+option java_outer_classname = "ServiceModel";
+option java_multiple_files = true;
+
+service UtilsService {
+  rpc Ping(google.protobuf.Empty) returns (google.protobuf.StringValue);
+  rpc Time(google.protobuf.Empty) returns (google.protobuf.UInt64Value);
+  rpc echo (google.protobuf.StringValue) returns (google.protobuf.StringValue);
+  rpc hello (google.protobuf.StringValue) returns (google.protobuf.StringValue);
+  rpc fortune (google.protobuf.Empty) returns (google.protobuf.StringValue);
+}
